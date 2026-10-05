@@ -199,13 +199,47 @@ body.locked #login{display:grid}
 #cf{display:flex;gap:10px;padding:14px;border-top:1px solid var(--line)}
 #cf input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:11px 16px;color:var(--ink);font:inherit}
 #cn{font-size:12px;color:var(--mute);padding:0 18px 12px}
+/* wikipedia coffee types */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.wcard{display:flex;flex-direction:column;text-align:left;padding:0;background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;transition:transform .25s,border-color .25s}
+.wcard:hover{transform:translateY(-4px);border-color:var(--gold2)}
+.wcard .ph{height:180px;background:linear-gradient(160deg,#1c130c,#3b2415);overflow:hidden}
+.wcard .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.wcard:hover .ph img{transform:scale(1.07)}
+.wcard .in{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.wcard h3{font-size:22px}
+.wcard p{margin:0;color:var(--mute);font-size:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.wcard small{margin-top:auto;padding-top:6px;color:var(--gold);font-size:12px}
+.wsk{height:300px;border-radius:14px;background:linear-gradient(100deg,var(--bg2) 30%,#24180f 50%,var(--bg2) 70%) 0 0/200% 100%;animation:shim 1.4s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+body.mopen{overflow:hidden}
+#wm{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));background:rgba(8,5,3,.8);backdrop-filter:blur(6px)}
+#wm.open{display:flex}
+.wbox{position:relative;width:min(620px,100%);max-height:100%;overflow:auto;background:var(--bg2);border:1px solid var(--gold2);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:wpop .3s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes wpop{from{opacity:0;transform:translateY(26px) scale(.94)}}
+.wx{position:absolute;top:12px;right:12px;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:rgba(12,8,6,.78);font-size:20px;line-height:1}
+.wx:hover{border-color:var(--gold)}
+.wmain{aspect-ratio:4/3;background:#0c0806;display:grid;place-items:center;overflow:hidden}
+.wmain img{width:100%;height:100%;object-fit:contain;display:block}
+.wthumbs{display:flex;gap:8px;padding:12px 20px 0;overflow-x:auto}
+.wthumbs button{flex:0 0 68px;height:50px;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;opacity:.65;background:#0c0806}
+.wthumbs button[aria-current=true]{border-color:var(--gold);opacity:1}
+.wthumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.wbody{padding:18px 22px 24px}
+.wbody h2{font-size:clamp(30px,6vw,40px)}
+.wbody .desc{color:var(--gold);font-size:14px;margin:8px 0 16px}
+.wbody p{color:#d6c7b3;font-size:15px;line-height:1.7;margin:0 0 12px}
+.wbody h4{font:600 19px "Playfair Display",Georgia,serif;margin:20px 0 6px}
+.wbody .wsrc{display:inline-block;margin-top:8px;color:var(--gold);border-bottom:1px solid var(--gold2);font-size:14px}
+.wbody .wlic{display:block;color:var(--mute);font-size:12px;margin-top:14px}
+@media(prefers-reduced-motion:reduce){.wsk,.wbox{animation:none}.wcard,.wcard .ph img{transition:none}}
 </style>
 </head>
 <body>
 <nav>
  <div class="wrap">
   <a class="brand" href="#top">GUK</a>
-  <div class="links"><a class="l" href="#story">Story</a><a class="l" href="#journey">Journey</a><a class="l" href="#shop">Shop</a><a class="l" href="#menu">Menu</a><a class="l" href="#offers">Offers</a><a class="l" href="#subscribe">Subscription</a><a class="l" href="#brew">Brews</a><a class="l" href="#reviews">Reviews</a><a class="l" href="#chat">Chat</a><a class="l" href="#visit">Visit</a></div>
+  <div class="links"><a class="l" href="#story">Story</a><a class="l" href="#journey">Journey</a><a class="l" href="#shop">Shop</a><a class="l" href="#menu">Menu</a><a class="l" href="#offers">Offers</a><a class="l" href="#subscribe">Subscription</a><a class="l" href="#brew">Brews</a><a class="l" href="#wiki">Types</a><a class="l" href="#reviews">Reviews</a><a class="l" href="#chat">Chat</a><a class="l" href="#visit">Visit</a></div>
   <button class="cart" id="cartBtn" aria-label="Cart">Cart (<span id="count">0</span>)</button>
   <button class="cart" id="out">Log out</button>
   <button class="cart" id="burger" aria-label="Menu" aria-expanded="false">Menu</button>
@@ -304,13 +338,15 @@ body.locked #login{display:grid}
 </section>
 
 <section class="s" id="brew"><div class="wrap"><div class="head"><h2>Brews from around the world.</h2><p>Live recipes loaded from a coffee API. Hit shuffle for new ideas.</p></div><div class="bgrid" id="bgrid"><p class="bmsg">Loading brews...</p></div><div class="bhead"><button class="btn alt" id="bshuf" type="button">Shuffle brews</button><span class="bmsg" id="bsrc"></span></div></div></section>
+<section class="s" id="wiki"><div class="wrap"><div class="head"><h2>Coffee types, from Wikipedia.</h2><p>Classic drinks pulled live from the Wikipedia API. Tap a card to read more and browse its photos.</p></div><div class="wgrid" id="wgrid" aria-live="polite"></div><div class="bhead"><span class="bmsg">Source: Wikipedia, text and images under CC BY-SA.</span></div></div></section>
 <section class="s" id="chat" style="background:var(--bg2);border-block:1px solid var(--line)"><div class="wrap"><div class="head"><h2>Chat board.</h2><p>Say hello, ask about a roast, or share your favourite cup.</p></div>
 <div class="chat"><div id="msgs" aria-live="polite"></div><form id="cf" autocomplete="off"><input id="ci" maxlength="300" placeholder="Write a message" aria-label="Message"><button class="btn" type="submit">Send</button></form><div id="cn"></div></div></div></section>
 </main>
 
 <footer><div class="wrap"><span>GUK Coffee Roasters</span><span>Maddilapalem, Visakhapatnam 530013 · 86884 25459</span></div></footer>
 <aside id="drawer" aria-label="Cart"><div class="dh"><h3>Your cart</h3><button class="cart" id="cx">Close</button></div><ul id="items"></ul><div class="tt"><span>Total</span><b id="tot">₹0</b></div><a class="btn" id="wa" target="_blank" rel="noopener" hidden>Order on WhatsApp</a></aside>
-<div id="toast" role="status" aria-live="polite"></div>
+<div id="toast" role="status" aria-live="polite"></div><div id="wm" aria-hidden="true"><div class="wbox" id="wbox" role="dialog" aria-modal="true" aria-labelledby="wmt" tabindex="-1"></div></div>
+
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -391,6 +427,57 @@ async function loadBrews(force){
  try{const r=await fetch(BREW_API);if(!r.ok)throw 0;const d=await r.json();if(!Array.isArray(d)||!d.length)throw 0;brews=d;showBrews(d,'Source: sampleapis.com')}
  catch(e){brews=null;showBrews(BREW_FALLBACK,'Could not reach the API, showing sample brews.')}}
 $('#bshuf').onclick=()=>loadBrews(false);loadBrews(true);
+
+/* ===== Wikipedia: coffee types ===== */
+const WIKI=['Espresso','Cappuccino','Latte','Caffè Americano','Flat white','Caffè mocha','Caffè macchiato','Cortado','Affogato','Irish coffee','Turkish coffee','Cold brew coffee','Ristretto','Frappé coffee'];
+const W_REST='https://en.wikipedia.org/api/rest_v1/page/summary/';
+const W_ACT='https://en.wikipedia.org/w/api.php?format=json&origin=*&redirects=1&action=query&';
+let wlist=[],wtok=0,wlast=null;
+const wjson=async u=>{const r=await fetch(u);if(!r.ok)throw 0;return r.json()};
+async function loadWiki(){
+ const g=$('#wgrid');
+ g.innerHTML='<div class="wsk"></div>'.repeat(8);
+ const res=await Promise.allSettled(WIKI.map(t=>wjson(W_REST+encodeURIComponent(t.replace(/ /g,'_')))));
+ const seen=new Set();
+ wlist=res.filter(r=>r.status==='fulfilled'&&r.value&&r.value.type!=='disambiguation'&&r.value.extract).map(r=>{const d=r.value;return{title:d.title,desc:d.description||'',extract:d.extract,thumb:d.thumbnail&&d.thumbnail.source,orig:d.originalimage&&d.originalimage.source,url:d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page}}).filter(w=>!seen.has(w.title)&&seen.add(w.title));
+ if(!wlist.length){g.innerHTML='<p class="bmsg">Could not reach Wikipedia. <button class="btn alt" id="wretry" type="button" style="margin-left:8px">Try again</button></p>';$('#wretry').onclick=loadWiki;return}
+ g.innerHTML=wlist.map((w,i)=>`<button class="wcard" type="button" data-w="${i}" aria-haspopup="dialog"><div class="ph">${w.thumb&&/^https:/.test(w.thumb)?`<img src="${esc(w.thumb)}" alt="${esc(w.title)}" loading="lazy" onerror="this.remove()">`:''}</div><div class="in"><h3>${esc(w.title)}</h3><p>${esc(w.extract)}</p><small>Open details</small></div></button>`).join('')}
+async function wikiImages(w){
+ const d=await wjson(W_ACT+'generator=images&gimlimit=50&prop=imageinfo&iiprop=url|mime|size&iiurlwidth=800&titles='+encodeURIComponent(w.title));
+ const bad=/logo|icon|flag|symbol|commons|wiki|pictogram|stub|question|edit|ambox|portal|disambig|folder|crystal|nuvola|merge|split|OOjs|Increase|Decrease|Steady/i;
+ const items=Object.values((d.query&&d.query.pages)||{}).sort((a,b)=>(a.index||0)-(b.index||0)).map(p=>({t:p.title||'',i:p.imageinfo&&p.imageinfo[0]})).filter(x=>x.i&&/^image\/(jpeg|png|webp)$/.test(x.i.mime)&&x.i.width>=300&&x.i.height>=200&&!bad.test(x.t)&&/^https:/.test(x.i.thumburl||'')).map(x=>({src:x.i.thumburl,name:decodeURIComponent((x.i.url||'').split('/').pop())}));
+ const lead=w.orig?decodeURIComponent(w.orig.split('/').pop()):'',k=items.findIndex(x=>x.name===lead);
+ if(k>0)items.unshift(items.splice(k,1)[0]);else if(k<0&&w.thumb)items.unshift({src:w.thumb,name:lead});
+ return items.slice(0,8)}
+async function wikiText(w){
+ const d=await wjson(W_ACT+'prop=extracts&explaintext=1&exsectionformat=plain&titles='+encodeURIComponent(w.title));
+ const p=Object.values((d.query&&d.query.pages)||{})[0],raw=(p&&p.extract)||'';
+ const stop=/^(See also|References|External links|Notes|Further reading|Bibliography|Sources|Footnotes)$/i;
+ let out='',n=0;
+ for(const line of raw.split('\n').map(s=>s.trim()).filter(Boolean)){
+  const head=line.length<50&&!/[.!?:]$/.test(line);
+  if(head&&stop.test(line))break;
+  if(n>2600)break;
+  out+=head?`<h4>${esc(line)}</h4>`:`<p>${esc(line)}</p>`;n+=line.length}
+ return out.replace(/<h4>[^<]*<\/h4>$/,'')}
+function openWiki(i){
+ const w=wlist[i],tok=++wtok,box=$('#wbox'),m=$('#wm');wlast=document.activeElement;
+ box.innerHTML=`<button class="wx" type="button" aria-label="Close">×</button><div class="wmain"><img id="wimg" src="${esc(w.thumb||'')}" alt="${esc(w.title)}"></div><div class="wthumbs" id="wth" hidden></div><div class="wbody"><h2 id="wmt">${esc(w.title)}</h2><div class="desc">${esc(w.desc)}</div><div id="wtx"><p>${esc(w.extract)}</p><p class="bmsg">Loading more from Wikipedia...</p></div>${w.url?`<a class="wsrc" href="${esc(w.url)}" target="_blank" rel="noopener">Read the full article on Wikipedia</a>`:''}<span class="wlic">Text and images from Wikipedia under CC BY-SA. Credits are on each image's Wikipedia page.</span></div>`;
+ const im=$('#wimg');if(!w.thumb)im.parentNode.hidden=true;im.onerror=()=>{im.parentNode.hidden=true};
+ m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.classList.add('mopen');box.scrollTop=0;box.querySelector('.wx').focus();
+ wikiText(w).then(h=>{if(tok===wtok&&h)$('#wtx').innerHTML=h}).catch(()=>{if(tok===wtok)$('#wtx').innerHTML=`<p>${esc(w.extract)}</p>`});
+ wikiImages(w).then(list=>{if(tok!==wtok||!list.length)return;
+  const main=$('#wimg');main.parentNode.hidden=false;main.src=list[0].src;
+  if(list.length<2)return;
+  const th=$('#wth');th.hidden=false;
+  th.innerHTML=list.map((x,j)=>`<button type="button" data-s="${esc(x.src)}" aria-label="Photo ${j+1}"${j?'':' aria-current="true"'}><img src="${esc(x.src)}" alt="" loading="lazy"></button>`).join('')}).catch(()=>{})}
+function closeWiki(){const m=$('#wm');if(!m.classList.contains('open'))return;wtok++;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.classList.remove('mopen');if(wlast&&wlast.focus)wlast.focus()}
+$('#wgrid').addEventListener('click',e=>{const b=e.target.closest('button[data-w]');if(b)openWiki(+b.dataset.w)});
+$('#wm').addEventListener('click',e=>{if(e.target.id==='wm'||e.target.closest('.wx'))return closeWiki();const t=e.target.closest('.wthumbs button');if(!t)return;$('#wimg').src=t.dataset.s;$$('.wthumbs button').forEach(x=>x.setAttribute('aria-current',x===t))});
+addEventListener('keydown',e=>{const m=$('#wm');if(!m.classList.contains('open'))return;
+ if(e.key==='Escape')return closeWiki();
+ if(e.key==='Tab'){const f=$$('#wbox button:not([hidden]),#wbox a[href]').filter(x=>!x.closest('[hidden]'));if(!f.length)return;const a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});
+new IntersectionObserver((es,o)=>{if(es.some(x=>x.isIntersecting)){o.disconnect();loadWiki()}},{rootMargin:'600px'}).observe($('#wiki'));
 
 /* ===== Chat board ===== */
 /* Set CHAT_API to your backend URL to share messages between all visitors.
